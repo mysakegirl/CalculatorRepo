@@ -22,7 +22,7 @@ namespace Calculator
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.activity_main);
 
-            #region instation
+            #region instantiation
             expressionText = FindViewById<TextView>(Resource.Id.expressionText);
             btn0 = FindViewById<Button>(Resource.Id.btn0);
             btn0.Click += Btn0_Click;
@@ -100,94 +100,89 @@ namespace Calculator
         {
             int textLength = expressionText.Text.Length;
             string lastChar = expressionText.Text.Substring(textLength - 1, 1);
-            if (lastChar != "+" && lastChar != "-" && lastChar != "x" && lastChar != "÷")
+            string firstChar = getFirstChar();
+            if (firstChar != "=")
             {
-                string expression = expressionText.Text;
-                ArrayList expList = new ArrayList();
-                string temp = "";
-                bool isOperator = false;
-                float Result = 0;
-                Operation operation = new Operation();
-                operation.Parse(expression);
-                double result = operation.Solve();
-                expressionText.Text = result.ToString();
-                //loop for getting the expression piecebypiece..
-                //for (int i = 0; i < expression.Length; i++)
-                //{
-                //    string expSub = expression.Substring(i, 1);
-                //    if (expSub == "+" || expSub == "-" || expSub == "x" || expSub == "÷")
-                //    {
-                //        expList.Add(temp);
-                //        temp = "";
-                //        isOperator = true;
-                //    }
-                //    else
-                //    {
-                //        temp += expSub;
-                //    }
+                if (lastChar != "+" && lastChar != "-" && lastChar != "x" && lastChar != "÷")
+                {
+                    string expression = expressionText.Text;
+                    if (expression.Contains("x"))
+                    {
+                        expression = expression.Replace("x", "*");
+                    }
+                    else if (expression.Contains("÷"))
+                    {
+                        expression = expression.Replace("÷", "/");
+                    }
 
-                //    if (isOperator)
-                //    {
-                //        temp += expSub;
-                //        isOperator = false;
-                //    }
-
-                //    if((i+1) == expression.Length)
-                //    {
-                //        expList.Add(temp);
-                //    }
-                //}
-
-                //ArrayList tempArr = new ArrayList();
-                //ArrayList usedExpArr = new ArrayList();
-                //for (int i = 0; i < expList.Count; i++)
-                //{
-                //     Convert.T
-
-                //    for (int j = 0; j < length; j++)
-                //    {
-
-                //    }
-                //    string z = expList[i].ToString();
-
-                //    if (expList[i].Contains("+") || item.Contains("-") || item.Contains("x") || item.Contains("÷"))
-                //    {
-
-                //    }
-                //    else
-                //    {
-
-                //    }
-                //}
-
+                    Operation operation = new Operation();
+                    operation.Parse(expression);
+                    double result = operation.Solve();
+                    expressionText.Text = "=" + result.ToString();
+                }
             }
         }
 
         private void Dividebtn_Click(object sender, System.EventArgs e)
         {
-            //operationAppend("÷");
-            operationAppend("/");
+            if (getFirstChar() == "=")
+            {
+                expressionText.Text = expressionText.Text.Remove(0, 1);
+                operationAppend("÷");
+            }
+            else
+            {
+                operationAppend("÷");
+                //operationAppend("/");
+            }
         }
 
         private void Timesbtn_Click(object sender, System.EventArgs e)
         {
-            //operationAppend("x");
-            operationAppend("*");
+            if (getFirstChar() == "=")
+            {
+                expressionText.Text = expressionText.Text.Remove(0, 1);
+                operationAppend("x");
+            }
+            else
+            {
+                operationAppend("x");
+                //operationAppend("*");
+            }
         }
 
         private void Minusbtn_Click(object sender, System.EventArgs e)
         {
-            operationAppend("-");
+            if (getFirstChar() == "=")
+            {
+                expressionText.Text = expressionText.Text.Remove(0, 1);
+                operationAppend("-");
+            }
+            else { 
+                operationAppend("-");
+            }
         }
 
         private void Plusbtn_Click(object sender, System.EventArgs e)
         {
-            operationAppend("+");
+            if (getFirstChar() == "=")
+            {
+                expressionText.Text = expressionText.Text.Remove(0, 1);
+                operationAppend("+");
+            }
+            else
+            {
+                operationAppend("+");
+            }
         }
 
         private void Btn9_Click(object sender, System.EventArgs e)
         {
             if (expressionText.Text == "0")
+            {
+                expressionText.Text = "9";
+            }
+            else if (getFirstChar() == "=")
             {
                 expressionText.Text = "9";
             }
@@ -203,6 +198,10 @@ namespace Calculator
             {
                 expressionText.Text = "8";
             }
+            else if (getFirstChar() == "=")
+            {
+                expressionText.Text = "8";
+            }
             else
             {
                 expressionText.Text += "8";
@@ -212,6 +211,10 @@ namespace Calculator
         private void Btn7_Click(object sender, System.EventArgs e)
         {
             if (expressionText.Text == "0")
+            {
+                expressionText.Text = "7";
+            }
+            else if (getFirstChar() == "=")
             {
                 expressionText.Text = "7";
             }
@@ -227,6 +230,10 @@ namespace Calculator
             {
                 expressionText.Text = "6";
             }
+            else if (getFirstChar() == "=")
+            {
+                expressionText.Text = "6";
+            }
             else
             {
                 expressionText.Text += "6";
@@ -236,6 +243,10 @@ namespace Calculator
         private void Btn5_Click(object sender, System.EventArgs e)
         {
             if (expressionText.Text == "0")
+            {
+                expressionText.Text = "5";
+            }
+            else if (getFirstChar() == "=")
             {
                 expressionText.Text = "5";
             }
@@ -251,6 +262,10 @@ namespace Calculator
             {
                 expressionText.Text = "4";
             }
+            else if (getFirstChar() == "=")
+            {
+                expressionText.Text = "4";
+            }
             else
             {
                 expressionText.Text += "4";
@@ -260,6 +275,10 @@ namespace Calculator
         private void Btn3_Click(object sender, System.EventArgs e)
         {
             if (expressionText.Text == "0")
+            {
+                expressionText.Text = "3";
+            }
+            else if (getFirstChar() == "=")
             {
                 expressionText.Text = "3";
             }
@@ -275,6 +294,10 @@ namespace Calculator
             {
                 expressionText.Text = "2";
             }
+            else if (getFirstChar() == "=")
+            {
+                expressionText.Text = "2";
+            }
             else
             {
                 expressionText.Text += "2";
@@ -287,6 +310,10 @@ namespace Calculator
             {
                 expressionText.Text = "1";
             }
+            else if (getFirstChar() == "=")
+            {
+                expressionText.Text = "1";
+            }
             else { 
               expressionText.Text += "1";
             }
@@ -294,9 +321,17 @@ namespace Calculator
 
         private void Btn0_Click(object sender, System.EventArgs e)
         {
+            
             if (expressionText.Text != "0")
             {
-                expressionText.Text += "0";
+                if (getFirstChar() == "=")
+                {               
+                    expressionText.Text = "0";
+                }
+                else
+                {
+                    expressionText.Text += "0";
+                }
             }
         }
 
@@ -305,6 +340,11 @@ namespace Calculator
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+        private string getFirstChar()
+        {
+            return expressionText.Text.Substring(0, 1);
         }
 
         private void operationAppend(string op)
@@ -382,4 +422,5 @@ namespace Calculator
 
             return result;
         }
-    } }
+    }
+}
