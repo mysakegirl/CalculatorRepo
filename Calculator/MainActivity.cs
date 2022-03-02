@@ -13,8 +13,9 @@ namespace Calculator
     [Activity(Label = "Calc", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
-        Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, plusbtn, minusbtn, timesbtn, dividebtn, equalbtn, clearbtn, backbtn, pointbtn;
+        Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, plusbtn, minusbtn, timesbtn, dividebtn, equalbtn, clearbtn, backbtn, pointbtn, mpush, mpop, mpeek, mclear;
         TextView expressionText;
+        Stack st = new Stack();
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -60,7 +61,64 @@ namespace Calculator
             backbtn.Click += Backbtn_Click;
             pointbtn = FindViewById<Button>(Resource.Id.pointbtn);
             pointbtn.Click += Pointbtn_Click;
+            mpush = FindViewById<Button>(Resource.Id.pushbtn);
+            mpush.Click += Mpush_Click;
+            mpop = FindViewById<Button>(Resource.Id.popbtn);
+            mpop.Click += Mpop_Click;
+            mpeek = FindViewById<Button>(Resource.Id.peekbtn);
+            mpeek.Click += Mpeek_Click;
+            mclear = FindViewById<Button>(Resource.Id.clearstackbtn);
+            mclear.Click += Mclear_Click;
             #endregion
+        }
+
+        private void Mclear_Click(object sender, EventArgs e)
+        {
+           if(st.Count != 0)
+            {
+                st.Clear();
+            }
+        }
+
+        private void Mpeek_Click(object sender, EventArgs e)
+        {
+            if (st.Count != 0)
+            {
+               expressionText.Text = st.Peek().ToString();
+            }
+            else
+            {
+                expressionText.Text = "0";
+            }
+        }
+
+        private void Mpop_Click(object sender, EventArgs e)
+        {
+            if(st.Count != 0)
+            {
+                expressionText.Text = st.Pop().ToString();
+            }
+            else
+            {
+                expressionText.Text = "0";
+            }
+        }
+
+        private void Mpush_Click(object sender, EventArgs e)
+        {
+            if(getFirstChar() == "=")
+            {
+                expressionText.Text = expressionText.Text.Remove(0, 1);
+                st.Push(expressionText.Text);
+            }
+            else
+            {
+                string exp = expressionText.Text;
+                if(!(exp.Contains("+")) || !(exp.Contains("-")) || !(exp.Contains("x")) || !(exp.Contains("÷")))
+                {
+                    st.Push(expressionText.Text);
+                }
+            }
         }
 
         private void Pointbtn_Click(object sender, System.EventArgs e)
