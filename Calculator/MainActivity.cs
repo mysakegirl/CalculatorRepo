@@ -168,7 +168,7 @@ namespace Calculator
                     {
                         expression = expression.Replace("x", "*");
                     }
-                    else if (expression.Contains("÷"))
+                    if (expression.Contains("÷"))
                     {
                         expression = expression.Replace("÷", "/");
                     }
